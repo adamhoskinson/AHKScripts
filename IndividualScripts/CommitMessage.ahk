@@ -6,6 +6,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;Note Requires wsl for tr command
 ;Change to your repository location
 F16::
-RunWait, %ComSpec% /c cd C:\Users\AdamHoskinson\source\repos\driveworks && git branch --show-current  | wsl tr '[:lower:]' '[:upper:]'| clip
+RunWait, %ComSpec% /c cd !!!SetRepoPath!!! && git branch --show-current  | wsl tr '[:lower:]' '[:upper:]'| clip
 Send, ^v {Ctrl Up}{BackSpace}{BackSpace} - {Space}
 return

@@ -3,8 +3,8 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
-SpotifyPath := "C:\Users\AdamHoskinson\AppData\Roaming\Spotify\Spotify.exe"
-TodoPath := "C:\Users\AdamHoskinson\Desktop\AHK\Todo.lnk"
+SpotifyPath := "!!!SetSpotifyPath!!!"
+TodoPath := "!!!SetTodoPath!!!"
 
 #^+!t::
 if WinExist(Todo ahk_exe chrome.exe)

@@ -2,6 +2,8 @@
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
 
+;;; Variables
+
 ; HyperMouseScroll ---------------------------------------------------------
 
 swapy := false
@@ -10,6 +12,25 @@ MaxScrollLimit := 15
 PixelsPerScrollStep := 10
 ScrollScanIntervalMS := 30
 DeadZone := 3
+
+; WinMove -----------------------------------------------------------
+
+WinMoveAmount = 40
+WinSetToWidth = % Floor(A_ScreenWidth*2/3)
+WinSetToHeight = % Floor(A_ScreenHeight*2/3)
+
+; AppLaunch -----------------------------------------------------------
+
+SpotifyPath := "!!!SetSpotifyPath!!!"
+TodoPath := "!!!SetTodoPath!!!"
+
+; CommitMessage -----------------------------------------------------------
+
+GitRepoLocation := "!!!SetRepoPath!!!"
+
+;;; Scripts
+
+; HyperMouseScroll ---------------------------------------------------------
 
 running := 0
 dy := 0
@@ -107,26 +128,6 @@ F17::
 F17 up::
 	running := 0
     return
-
-
-;;; Variables
-
-; WinMove -----------------------------------------------------------
-
-WinMoveAmount = 40
-WinSetToWidth = % Floor(A_ScreenWidth*2/3)
-WinSetToHeight = % Floor(A_ScreenHeight*2/3)
-
-; AppLaunch -----------------------------------------------------------
-
-SpotifyPath := "C:\Users\AdamHoskinson\AppData\Roaming\Spotify\Spotify.exe"
-TodoPath := "C:\Users\AdamHoskinson\Desktop\AHK\Todo.lnk"
-
-; CommitMessage -----------------------------------------------------------
-
-GitRepoLocation := "C:\Users\AdamHoskinson\source\repos\driveworks"
-
-;;; Scripts
 
 ; WinMove -----------------------------------------------------------
 
