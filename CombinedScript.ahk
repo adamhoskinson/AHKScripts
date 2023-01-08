@@ -1,0 +1,197 @@
+#SingleInstance, Force
+SendMode Input
+SetWorkingDir, %A_ScriptDir%
+
+; HyperMouseScroll ---------------------------------------------------------
+
+swapy := false
+swapx := false
+MaxScrollLimit := 15
+PixelsPerScrollStep := 10
+ScrollScanIntervalMS := 30
+DeadZone := 3
+
+running := 0
+dy := 0
+dx := 0
+
+loop
+{
+	sleep %ScrollScanIntervalMS%
+
+	if (running) {
+		mousegetpos, mx, my
+        delx := (mx-mxLast)
+        dely := (my-myLast)
+        if (abs(delx)>abs(dely)){
+            if (delx>DeadZone Or delx<-DeadZone){
+                dx := dx + delx
+            }
+        }
+        Else
+        {
+            if (dely>DeadZone Or dely<-DeadZone){
+                dy := dy + dely
+            }
+        }
+
+		scrollsNx := floor(abs(dx / PixelsPerScrollStep))
+        scrollsNy := floor(abs(dy / PixelsPerScrollStep))
+
+        nx := min(scrollsNx, MaxScrollLimit)
+		ny := min(scrollsNy, MaxScrollLimit)
+
+        if (ny>0)
+        {
+            directiony := (dy >= 0) ^ swapy
+
+            if (nx>0)
+            {
+                directionx := (dx >= 0) ^ swapx
+
+                if (directionx = 1)
+                {
+			        send, {WheelRight %nx%}
+                }
+
+		        else if (directionx = 0)
+                {
+			        send, {WheelLeft %nx%}
+                }
+
+                dx := 0
+            }
+
+            if (directiony = 1)
+            {
+			    send, {wheeldown %ny%}
+            }
+
+		    else if (directiony = 0)
+            {
+			    send, {wheelup %ny%}
+            }
+
+            dy := 0
+        }
+        else if(nx>0)
+        {
+            directionx := (dx >= 0) ^ swapx
+
+            if (directionx = 1)
+            {
+			    send, {WheelRight %nx%}
+            }
+		    else if (directionx = 0)
+            {
+			    send, {WheelLeft %nx%}
+            }
+
+            dx := 0
+        }
+
+        mouseMove, mxLast, myLast, 0
+	}
+}
+
+F17::
+    if (running == 0)
+    {
+	    running := 1
+        dy := 0
+        dx := 0
+	    mousegetpos, mxLast, myLast
+    }
+    return
+
+F17 up::
+	running := 0
+    return
+
+
+;;; Variables
+
+; WinMove -----------------------------------------------------------
+
+WinMoveAmount = 40
+WinSetToWidth = % Floor(A_ScreenWidth*2/3)
+WinSetToHeight = % Floor(A_ScreenHeight*2/3)
+
+; AppLaunch -----------------------------------------------------------
+
+SpotifyPath := "C:\Users\AdamHoskinson\AppData\Roaming\Spotify\Spotify.exe"
+TodoPath := "C:\Users\AdamHoskinson\Desktop\AHK\Todo.lnk"
+
+; CommitMessage -----------------------------------------------------------
+
+GitRepoLocation := "C:\Users\AdamHoskinson\source\repos\driveworks"
+
+;;; Scripts
+
+; WinMove -----------------------------------------------------------
+
+#^+!j::
+WinGetPos, X, Y, W, H, A
+WinMove, A,,X-WinMoveAmount, %Y%, %W%, %H%
+return
+
+
+#^+!l::
+WinGetPos, X, Y, W, H, A
+WinMove, A,,X+WinMoveAmount, %Y%, %W%, %H%
+return
+
+
+#^+!i::
+WinGetPos, X, Y, W, H, A
+WinMove, A,,%X%, Y-WinMoveAmount, %W%, %H%
+return
+
+
+#^+!k::
+WinGetPos, X, Y, W, H, A
+WinMove, A,,%X%, Y+WinMoveAmount, %W%, %H%
+return
+
+
+#^+!r::
+WinGetPos, X, Y,W,H, A
+WinGet minmax, MinMax, A
+If (MinMax == 1){
+    WinRestore, A
+}
+WinMove,A,,(A_ScreenWidth/2)-(WinSetToWidth/2), (A_ScreenHeight/2)-(WinSetToHeight/2), WinSetToWidth, WinSetToHeight
+return
+
+; AppLaunch -----------------------------------------------------------
+
+#^+!t::
+if WinExist("Todo ahk_exe chrome.exe")
+    WinActivate
+else
+    run, TodoPath
+return
+
+#^+!s::
+if WinExist("ahk_exe Spotify.exe")
+    WinActivate
+else
+    run, SpotifyPath
+return
+
+; VolumeControl -----------------------------------------------------------
+
+F15 & WheelUp::
+Send {Volume_Up 1}
+return
+F15 & WheelDown::
+Send {Volume_Down 1}
+return
+
+; CommitMessage -----------------------------------------------------------
+
+;Note Requires wsl for tr command
+F16::
+RunWait, %ComSpec% /c cd %GitRepoLocation% && git branch --show-current  | wsl tr '[:lower:]' '[:upper:]'| clip
+Send, ^v {Ctrl Up}{BackSpace}{BackSpace} -{Space}
+return
