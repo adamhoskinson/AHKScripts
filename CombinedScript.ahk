@@ -170,14 +170,14 @@ return
 if WinExist("Todo ahk_exe chrome.exe")
     WinActivate
 else
-    run, TodoPath
+    run, %TodoPath%
 return
 
 #^+!s::
 if WinExist("ahk_exe Spotify.exe")
     WinActivate
 else
-    run, SpotifyPath
+    run, %SpotifyPath%
 return
 
 ; VolumeControl -----------------------------------------------------------
