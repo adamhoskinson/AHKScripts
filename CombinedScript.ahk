@@ -191,8 +191,8 @@ return
 
 ; CommitMessage -----------------------------------------------------------
 
-;Note Requires wsl for tr command
 F16::
-RunWait, %ComSpec% /c cd %GitRepoLocation% && git branch --show-current  | wsl tr '[:lower:]' '[:upper:]'| clip
+RunWait, %ComSpec% /c cd %GitRepoLocation% && git branch --show-current  | clip
+StringUpper Clipboard, Clipboard
 Send, ^v {Ctrl Up}{BackSpace}{BackSpace} -{Space}
 return
